@@ -1,0 +1,3 @@
+[submodule "torch_fftconv"]
+	path = torch_fftconv
+	url = https://github.com/yoyololicon/fft-conv-pytorch
