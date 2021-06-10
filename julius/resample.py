@@ -17,6 +17,7 @@ import math
 import torch
 from torch.nn import functional as F
 
+from .functional import fft_conv1d
 from .core import sinc
 from .utils import simple_repr
 
@@ -25,6 +26,7 @@ class ResampleFrac(torch.nn.Module):
     """
     Resampling from the sample rate `old_sr` to `new_sr`.
     """
+
     def __init__(self, old_sr: int, new_sr: int, zeros: int = 24, rolloff: float = 0.945):
         """
         Args:
@@ -117,7 +119,8 @@ class ResampleFrac(torch.nn.Module):
         length = x.shape[-1]
         x = x.reshape(-1, length)
         x = F.pad(x[:, None], (self._width, self._width + self.old_sr), mode='replicate')
-        ys = F.conv1d(x, self.kernel, stride=self.old_sr)
+        # ys = F.conv1d(x, self.kernel, stride=self.old_sr)
+        ys = fft_conv1d(x, self.kernel, stride=self.old_sr)
         y = ys.transpose(1, 2).reshape(list(shape[:-1]) + [-1])
         return y[..., :int(self.new_sr * length / self.old_sr)]
 

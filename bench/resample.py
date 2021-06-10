@@ -41,7 +41,7 @@ def main():
     table.header()
 
     rates = [(2, 1), (1, 2), (4, 5), (10, 11), (44100, 16000), (20001, 30001)]
-    for old_sr, new_sr in rates:
+    for old_sr, new_sr in rates[:-2]:
         test(table, old_sr, new_sr, device=args.device)
 
 
